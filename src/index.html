@@ -1,39 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Чат</title>
-</head>
-<body>
-  <!-- Модальное окно входа -->
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <h2>Введите никнейм</h2>
-      <input type="text" id="nickname" placeholder="Ваш никнейм" autocomplete="off">
-      <button id="login-btn">Войти</button>
-      <p id="error-msg" class="error"></p>
-    </div>
-  </div>
-
-  <!-- Интерфейс чата -->
-  <div id="chat-container" class="chat-container hidden">
-    <aside class="users-panel">
-      <h3>Участники</h3>
-      <ul id="users-list"></ul>
-    </aside>
-    <main class="chat-main">
-      <div class="chat-header">
-        <span class="chat-header-user" id="chat-header-user"></span>
-        <button id="logout-btn" class="logout-btn" type="button">Выйти</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Чат</title>
+  </head>
+  <body>
+    <!-- Модальное окно входа -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h2>Введите никнейм</h2>
+        <input type="text" id="nickname" placeholder="Ваш никнейм" autocomplete="off" />
+        <button id="login-btn">Войти</button>
+        <p id="error-msg" class="error"></p>
       </div>
-      <div id="connection-status" class="connection-status hidden"></div>
-      <div id="messages" class="messages"></div>
-      <form id="message-form" class="message-form">
-        <input type="text" id="message-input" placeholder="Введите сообщение..." autocomplete="off">
-        <button type="submit">Отправить</button>
-      </form>
-    </main>
-  </div>
-</body>
+    </div>
+
+    <!-- Интерфейс чата -->
+    <div id="chat-container" class="chat-container hidden">
+      <aside class="users-panel">
+        <h3>Участники</h3>
+        <ul id="users-list"></ul>
+      </aside>
+      <main class="chat-main">
+        <div class="chat-header">
+          <span class="chat-header-user" id="chat-header-user"></span>
+          <button id="logout-btn" class="logout-btn" type="button">Выйти</button>
+        </div>
+        <div id="connection-status" class="connection-status hidden"></div>
+        <div id="messages" class="messages"></div>
+        <form id="message-form" class="message-form">
+          <input
+            type="text"
+            id="message-input"
+            placeholder="Введите сообщение..."
+            autocomplete="off"
+          />
+          <button type="submit">Отправить</button>
+        </form>
+      </main>
+    </div>
+  </body>
 </html>

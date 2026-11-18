@@ -10,7 +10,7 @@ export class ChatWebSocket {
     this.reconnectTimer = null;
     this.pingTimer = null;
     this.openedAt = null;
-    this._visibilityHandler = null;
+    this.visibilityHandler = null;
   }
 
   connect() {
@@ -20,20 +20,20 @@ export class ChatWebSocket {
     this.handlers.onConnecting?.(this.reconnectAttempts);
     this.ws = new WebSocket(wsUrl);
 
-    this.ws.addEventListener("open", () => {
-      console.log("[WS] connected:", wsUrl);
+    this.ws.addEventListener('open', () => {
+      console.log('[WS] connected:', wsUrl);
       this.openedAt = Date.now();
       this.reconnectAttempts = 0;
       this.startPing();
       this.handlers.onOpen?.();
     });
 
-    this.ws.addEventListener("message", (event) => {
+    this.ws.addEventListener('message', (event) => {
       let data;
       try {
         data = JSON.parse(event.data);
       } catch (e) {
-        console.error("[WS] invalid message:", event.data, e);
+        console.error('[WS] invalid message:', event.data, e);
         return;
       }
 
@@ -43,26 +43,24 @@ export class ChatWebSocket {
         return;
       }
 
-      if (data.type === "users") {
+      if (data.type === 'users') {
         this.handlers.onUsersUpdate?.(data.users);
         return;
       }
 
-      if (data.type === "history") {
+      if (data.type === 'history') {
         this.handlers.onHistory?.(data.messages);
         return;
       }
 
-      if (data.type === "send") {
+      if (data.type === 'send') {
         this.handlers.onMessage?.(data);
       }
     });
 
-    this.ws.addEventListener("close", (event) => {
+    this.ws.addEventListener('close', (event) => {
       const lifetime = this.openedAt ? Date.now() - this.openedAt : 0;
-      console.log(
-        `[WS] disconnected, code: ${event.code}, lifetime: ${lifetime}ms`
-      );
+      console.log(`[WS] disconnected, code: ${event.code}, lifetime: ${lifetime}ms`);
       this.openedAt = null;
       this.stopPing();
 
@@ -81,9 +79,7 @@ export class ChatWebSocket {
       if (this.reconnectAttempts < this.maxReconnectAttempts) {
         const delay = Math.min(1000 * 2 ** this.reconnectAttempts, 30000);
         this.reconnectAttempts += 1;
-        console.log(
-          `[WS] reconnect attempt ${this.reconnectAttempts} in ${delay}ms`
-        );
+        console.log(`[WS] reconnect attempt ${this.reconnectAttempts} in ${delay}ms`);
         this.handlers.onReconnecting?.(this.reconnectAttempts, delay);
         this.reconnectTimer = setTimeout(() => this.connect(), delay);
       } else {
@@ -91,24 +87,24 @@ export class ChatWebSocket {
       }
     });
 
-    this.ws.addEventListener("error", (err) => {
-      console.error("[WS] error", err);
+    this.ws.addEventListener('error', (err) => {
+      console.error('[WS] error', err);
     });
 
     // При возврате на вкладку — проверить, что соединение живо
-    if (!this._visibilityHandler) {
-      this._visibilityHandler = () => {
-        if (document.visibilityState === "visible") {
+    if (!this.visibilityHandler) {
+      this.visibilityHandler = () => {
+        if (document.visibilityState === 'visible') {
           if (!this.ws || this.ws.readyState === WebSocket.CLOSED) {
-            console.log("[WS] tab visible, forcing reconnect");
+            console.log('[WS] tab visible, forcing reconnect');
             this.reconnectAttempts = 0;
             this.connect();
           } else if (this.ws.readyState === WebSocket.OPEN) {
-            this.ws.send(JSON.stringify({ type: "ping" }));
+            this.ws.send(JSON.stringify({ type: 'ping' }));
           }
         }
       };
-      document.addEventListener("visibilitychange", this._visibilityHandler);
+      document.addEventListener('visibilitychange', this.visibilityHandler);
     }
   }
 
@@ -118,7 +114,7 @@ export class ChatWebSocket {
     this.stopPing();
     this.pingTimer = setInterval(() => {
       if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-        this.ws.send(JSON.stringify({ type: "ping" }));
+        this.ws.send(JSON.stringify({ type: 'ping' }));
       }
     }, 10000);
   }
@@ -132,7 +128,7 @@ export class ChatWebSocket {
 
   sendMessage(text) {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(JSON.stringify({ type: "send", message: text }));
+      this.ws.send(JSON.stringify({ type: 'send', message: text }));
       return true;
     }
     return false;
@@ -141,9 +137,9 @@ export class ChatWebSocket {
   close() {
     this.manuallyClosed = true;
     this.stopPing();
-    if (this._visibilityHandler) {
-      document.removeEventListener("visibilitychange", this._visibilityHandler);
-      this._visibilityHandler = null;
+    if (this.visibilityHandler) {
+      document.removeEventListener('visibilitychange', this.visibilityHandler);
+      this.visibilityHandler = null;
     }
     if (this.reconnectTimer) {
       clearTimeout(this.reconnectTimer);

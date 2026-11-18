@@ -1,6 +1,7 @@
 # Чат на WebSocket
 
-[![Deploy to GitHub Pages](https://github.com/fO-r-Ze/HW_Netology_JavaScript_Chat/actions/workflows/deploy.yml/badge.svg)](https://github.com/fO-r-Ze/HW_Netology_JavaScript_Chat/actions/workflows/deploy.yml)
+![Deploy](https://github.com/fO-r-Ze/HW_Netology_JavaScript_Chat/actions/workflows/deploy.yml/badge.svg?branch=main)
+[GitHub Pages](https://fO-r-Ze.github.io/HW_Netology_JavaScript_Chat/)
 
 Домашнее задание к занятию «EventSource, WebSockets».
 
